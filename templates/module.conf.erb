@@ -1,0 +1,10 @@
+# This file is managed by Puppet, do not edit by hand.
+# Any changes made to this file will be overwriten.
+
+$ModLoad <%=@name%>
+<% if @parameters
+@parameters.each_pair do |key,value|
+-%>
+<%= key -%> <%=value%>
+<%end
+end-%>

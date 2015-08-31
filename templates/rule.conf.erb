@@ -1,0 +1,35 @@
+# This file is managed by Puppet, do not edit by hand.
+# Any changes made to this file will be overwriten.
+
+<% if @final_rules 
+@final_rules.each do |rule|
+rule = rule.reject {|k,v| v.to_s.eql?('undef') or v.nil? or v.to_s.eql?('')}
+-%>
+<%= rule['pattern'] -%> <% 
+if rule['discard'] then 
+-%>
+~
+<% 
+elsif rule.has_key?('file') then 
+-%>
+<%= rule['file'] -%>
+<% 
+elsif rule.has_key?('host') and rule.has_key?('proto') then 
+  if rule['proto'].eql?('udp') then
+    proto_chevron = '@'
+  elsif rule['proto'].eql?('tcp') then
+    proto_chevron = '@@'
+  elsif rule['proto'].eql?('tcpo') then
+    proto_chevron = '@@(o)'
+  else
+    proto_chevron = rule['proto'] 
+  end
+-%>
+<%=proto_chevron-%><%=rule['host']-%><%if rule.has_key?('port') then-%>:<%= rule['port']-%><% end-%>
+<%
+end 
+-%>
+<% if rule.has_key?('format') then-%>;<%=rule['format']-%><% end -%>
+
+<% end -%>
+<% end -%>

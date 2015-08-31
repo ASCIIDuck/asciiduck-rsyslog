@@ -1,0 +1,27 @@
+# This file is managed by Puppet, do not edit by hand.
+# Any changes made to this file will be overwriten.
+
+$ModLoad imuxsock
+<% if @osfamily.eql?('RedHat')  then -%>
+<% if @operatingsystemmajrelease.eql?('7') then -%>
+$ModLoad imjournal
+<% else -%>
+$ModLoad imklog
+<% end -%>
+<% else -%>
+$ModLoad imklog
+<% end -%>
+
+$PrivDropToUser  <%= @user %>
+$PrivDropToGroup <%= @group %>
+
+$Umask     <%= @umask %>
+$FileOwner <%= @file_owner %>
+$FileGroup <%= @file_group %>
+$FileMode  <%= @file_mode %>
+$DirOwner  <%= @dir_owner %>
+$DirGroup  <%= @dir_group %>
+$DirMode   <%= @dir_mode %>
+
+$IncludeConfig <%= @config_dir_path -%>/*.conf
+
