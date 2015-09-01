@@ -1,2 +1,4 @@
 2015-08-25 Release 0.1.0
 - First release. Very basic. Much simple.
+2015-09-01 Release 0.1.1
+- Enforce manage_rsyslog on the defined types.
