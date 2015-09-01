@@ -9,10 +9,12 @@ define rsyslog::template (
     $priority = 10,
   ) {
 
-  file{"rsyslog_template_${name}":
-    owner   => 'root',
-    group   => 'root',
-    path    => "${::rsyslog::config_dir_path}/05${priority}_${name}.conf",
-    content => template('rsyslog/template.conf.erb'),
-  } ~> Service[$::rsyslog::service_name]
+  if $::rsyslog::manage_rsyslog {
+    file{"rsyslog_template_${name}":
+      owner   => 'root',
+      group   => 'root',
+      path    => "${::rsyslog::config_dir_path}/05${priority}_${name}.conf",
+      content => template('rsyslog/template.conf.erb'),
+    } ~> Service[$::rsyslog::service_name]
+  }
 }

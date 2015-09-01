@@ -26,6 +26,17 @@ describe 'rsyslog::template', :type=>:define do
             is_expected.to contain_file('rsyslog_template_tstfmt').with_content(/\$template tstfmt,%fmtstr/).with_path('/etc/rsyslog.d//0520_tstfmt.conf')
           end
         end
+        describe 'rsyslog::template with manage_rsyslog = false' do
+          let(:title) { 'tstfmt' }
+          let(:params) { { 'format'=>'%fmtstr' } }
+          let :pre_condition do
+            'class {"rsyslog": manage_rsyslog=>false }'
+          end
+          it do 
+            is_expected.to contain_rsyslog__template('tstfmt')
+            is_expected.to have_file_count(0)
+          end
+        end
       end
     end
   end

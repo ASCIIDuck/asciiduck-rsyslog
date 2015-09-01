@@ -52,10 +52,12 @@ define rsyslog::rule (
     } ]
   }
 
-  file{"rsyslog_rule_${name}":
-    owner   => 'root',
-    group   => 'root',
-    path    => "${::rsyslog::config_dir_path}/10${priority}_${name}.conf",
-    content => template('rsyslog/rule.conf.erb'),
-  } ~> Service[$::rsyslog::service_name]
+  if $::rsyslog::manage_rsyslog {
+    file{"rsyslog_rule_${name}":
+      owner   => 'root',
+      group   => 'root',
+      path    => "${::rsyslog::config_dir_path}/10${priority}_${name}.conf",
+      content => template('rsyslog/rule.conf.erb'),
+    } ~> Service[$::rsyslog::service_name]
+  }
 }

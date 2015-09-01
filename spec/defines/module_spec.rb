@@ -33,6 +33,16 @@ describe 'rsyslog::module', :type=>:define do
             is_expected.to contain_file('rsyslog_module_omtest').with_content(/^\$ModLoad omtest$/).with_path('/etc/rsyslog.d//0020_omtest.conf')
           end
         end
+        describe 'rsyslog::module with manage_rsyslog = false' do
+          let(:title) { 'omtest' }
+          let :pre_condition do
+            'class {"rsyslog": manage_rsyslog=>false }'
+          end
+          it do 
+            is_expected.to contain_rsyslog__module('omtest')
+            is_expected.to have_file_count(0)
+          end
+        end
       end
     end
   end

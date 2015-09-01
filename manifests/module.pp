@@ -12,11 +12,13 @@ define rsyslog::module (
   validate_numeric($priority)
   validate_hash($parameters)
 
-  file{"rsyslog_module_${name}":
-    owner   => 'root',
-    group   => 'root',
-    path    => "${::rsyslog::config_dir_path}/00${priority}_${name}.conf",
-    content => template('rsyslog/module.conf.erb'),
-  } ~> Service[$::rsyslog::service_name]
+  if $::rsyslog::manage_rsyslog {
+    file{"rsyslog_module_${name}":
+      owner   => 'root',
+      group   => 'root',
+      path    => "${::rsyslog::config_dir_path}/00${priority}_${name}.conf",
+      content => template('rsyslog/module.conf.erb'),
+    } ~> Service[$::rsyslog::service_name]
+  }
 
 }

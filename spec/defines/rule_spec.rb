@@ -140,6 +140,22 @@ describe 'rsyslog::rule', :type=>:define do
             is_expected.to contain_file('rsyslog_rule_test').with_content(/^\*\.\* \/dev\/null$/).with_path('/etc/rsyslog.d//1020_test.conf')
           end
         end
+        describe 'rsyslog::rule with manage_rsyslog = false' do
+          let(:title) { 'test' }
+          let(:params) do 
+            { 
+              'pattern'=> '*.*',
+              'file'=> '/dev/null',
+            } 
+          end
+          let :pre_condition do
+            'class {"rsyslog": manage_rsyslog=>false }'
+          end
+          it do 
+            is_expected.to contain_rsyslog__rule('test')
+            is_expected.to have_file_count(0)
+          end
+        end
       end
     end
   end

@@ -30,6 +30,16 @@ describe 'rsyslog' do
           end
           it { is_expected.to contain_file('/etc/rsyslog.d/').with_ensure('directory') }
         end
+        context "rsyslog class with manage_rsyslog = false" do
+          it { is_expected.to compile.with_all_deps }
+          let(:params) { { :manage_rsyslog => false } }
+
+          it { is_expected.to contain_class('rsyslog') }
+          it { is_expected.to contain_class('rsyslog::params') }
+          it { is_expected.to_not contain_class('rsyslog::install').that_comes_before('rsyslog::base_config') }
+          it { is_expected.to_not contain_class('rsyslog::base_config') }
+          it { is_expected.to_not contain_class('rsyslog::service').that_subscribes_to('rsyslog::base_config') }
+        end
       end
     end
   end
